@@ -524,7 +524,36 @@
     return evalRpn(rpn);
   }
 
-  function equals() {
+  async function tryBackendEvaluate(expr) {
+    // Only attempt when running from http(s). If opened as file://, this will fail.
+    if (location.protocol !== "http:" && location.protocol !== "https:") {
+      return null;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 1200);
+    try {
+      const res = await fetch("/api/eval", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expr }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data && data.ok === true && typeof data.result === "string") {
+        return data.result;
+      }
+      return null;
+    } catch {
+      return null;
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
+
+  async function equals() {
     const input = expression.trim();
     if (!input) {
       // If expression empty, keep showing last value
@@ -532,8 +561,14 @@
       return;
     }
 
-    const result = safeEvaluate(input);
-    const formatted = result === null ? "Error" : formatNumber(result);
+    const backend = await tryBackendEvaluate(input);
+    const formatted =
+      typeof backend === "string"
+        ? backend
+        : (() => {
+            const result = safeEvaluate(input);
+            return result === null ? "Error" : formatNumber(result);
+          })();
 
     tape.unshift({ expr: input, result: formatted, ts: Date.now() });
     tape = tape.slice(0, 200);
@@ -686,7 +721,7 @@
 
     if (k === "Enter" || k === "=") {
       e.preventDefault();
-      equals();
+      void equals();
       return;
     }
     if (k === "Backspace") {
@@ -735,7 +770,7 @@
 
     switch (action) {
       case "equals":
-        equals();
+        void equals();
         break;
       case "allClear":
         allClear();

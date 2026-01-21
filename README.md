@@ -4,7 +4,25 @@ A unique calculator with a **tape (history)** sidebar, **keyboard input**, **mem
 
 ## Run
 
+### Frontend only (no backend)
+
 - Open `index.html` in your browser (double-click it).
+
+### With backend (recommended for SSH/servers)
+
+This project includes a dependency-free Node server that serves the frontend files and adds a safe API endpoint: `POST /api/eval`.
+
+- Start: `node server.js`
+- Bind/port via env vars:
+  - `HOST=0.0.0.0 PORT=8000 node server.js`
+
+Then open the same URL: `http://localhost:8000` (or `http://<server-ip>:8000`).
+
+If you can’t open ports on the server, use SSH port forwarding from your laptop:
+
+- On your laptop: `ssh -L 8000:localhost:8000 ubuntu@<server-ip>`
+- On the server: `HOST=127.0.0.1 PORT=8000 node server.js`
+- Then open: `http://localhost:8000`
 
 ## Features
 
