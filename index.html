@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>PrismTape Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand" role="banner">
+        <div class="logo" aria-hidden="true">PT</div>
+        <div>
+          <div class="title">PrismTape</div>
+          <div class="subtitle">Calculator with a living tape</div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button
+          class="chip"
+          id="toggleTape"
+          type="button"
+          aria-pressed="true"
+          title="Toggle tape (history)"
+        >
+          <span class="chip-icon" aria-hidden="true">▤</span>
+          <span class="chip-label" id="tapeLabel">Tape</span>
+        </button>
+        <button
+          class="chip"
+          id="toggleTheme"
+          type="button"
+          aria-pressed="false"
+          title="Toggle theme"
+        >
+          <span class="chip-icon" id="themeIcon" aria-hidden="true">☾</span>
+          <span class="chip-label" id="themeLabel">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="calc" id="calc" data-tilt aria-label="Calculator">
+        <div class="display" role="group" aria-label="Display">
+          <div class="expr" id="expr" aria-live="polite"></div>
+          <div class="value" id="value" aria-live="polite">0</div>
+          <div class="display-actions">
+            <button
+              class="mini"
+              id="copyResult"
+              type="button"
+              title="Copy result"
+            >
+              Copy
+            </button>
+            <button class="mini" id="backspace" type="button" title="Backspace">
+              ⌫
+            </button>
+          </div>
+        </div>
+
+        <div class="keys" role="group" aria-label="Keys">
+          <button class="key key--ghost" data-action="allClear" type="button">
+            AC
+          </button>
+          <button class="key key--ghost" data-action="clearEntry" type="button">
+            CE
+          </button>
+          <button class="key key--ghost" data-action="paren" type="button">
+            ( )
+          </button>
+          <button
+            class="key key--op"
+            data-insert="/"
+            type="button"
+            aria-label="Divide"
+          >
+            ÷
+          </button>
+
+          <button class="key" data-action="memClear" type="button">MC</button>
+          <button class="key" data-action="memRecall" type="button">MR</button>
+          <button class="key" data-action="memPlus" type="button">M+</button>
+          <button
+            class="key key--op"
+            data-insert="*"
+            type="button"
+            aria-label="Multiply"
+          >
+            ×
+          </button>
+
+          <button class="key" data-insert="7" type="button">7</button>
+          <button class="key" data-insert="8" type="button">8</button>
+          <button class="key" data-insert="9" type="button">9</button>
+          <button class="key key--op" data-insert="-" type="button">−</button>
+
+          <button class="key" data-insert="4" type="button">4</button>
+          <button class="key" data-insert="5" type="button">5</button>
+          <button class="key" data-insert="6" type="button">6</button>
+          <button class="key key--op" data-insert="+" type="button">+</button>
+
+          <button class="key" data-insert="1" type="button">1</button>
+          <button class="key" data-insert="2" type="button">2</button>
+          <button class="key" data-insert="3" type="button">3</button>
+          <button class="key key--ghost" data-action="sign" type="button">
+            ±
+          </button>
+
+          <button class="key" data-insert="0" type="button">0</button>
+          <button class="key" data-insert="." type="button">.</button>
+          <button class="key" data-insert="%" type="button" title="Modulo">
+            mod
+          </button>
+          <button class="key key--equals" data-action="equals" type="button">
+            =
+          </button>
+        </div>
+
+        <footer class="hint" aria-label="Keyboard help">
+          Keys: <kbd>0-9</kbd> <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd>
+          <kbd>/</kbd> <kbd>%</kbd> <kbd>(</kbd> <kbd>)</kbd> <kbd>Enter</kbd>
+          <kbd>Backspace</kbd> <kbd>Esc</kbd>
+        </footer>
+      </section>
+
+      <aside class="tape" id="tape" data-tilt aria-label="Tape (history)">
+        <div class="tape-head">
+          <div class="tape-title">Tape</div>
+          <div class="tape-actions">
+            <button class="mini" id="clearTape" type="button">Clear</button>
+            <button class="mini" id="exportTape" type="button">Export</button>
+          </div>
+        </div>
+        <ol class="tape-list" id="tapeList"></ol>
+        <div class="tape-foot" id="tapeFoot">
+          Tip: click a result to reuse it.
+        </div>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
